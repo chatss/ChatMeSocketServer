@@ -8,7 +8,13 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.get("/", (req: express.Request, res: express.Response) => {
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/static/index.html");
+});
+app.get("/PrivateRoom", (req: express.Request, res: express.Response) => {
+    res.sendFile(__dirname + "/static/PrivateRoom.html");
+});
+app.get("/PublicRoom", (req: express.Request, res: express.Response) => {
+    res.sendFile(__dirname + "/static/PublicRoom.html");
 });
 
 app.use((req, res, next) => {

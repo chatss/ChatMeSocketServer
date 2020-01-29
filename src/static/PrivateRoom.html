@@ -24,7 +24,8 @@
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       $(function () {
-        var socket = io();
+        // var socket = io();
+        var socket = io("http://192.168.90.200:6003/PrivateRoom");
         $('form').submit(function(){
           console.log("emit chat", $('#m').val())
           socket.emit('chat message', $('#m').val());
