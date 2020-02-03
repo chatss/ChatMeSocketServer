@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node -r ts-node/register ./src/server.ts",
+    "pm2": "pm2 start ts-node -- -P tsconfig.json ./src/server -i 16",
     "start:watch": "nodemon"
   },
   "keywords": [],
@@ -14,9 +15,12 @@
   "devDependencies": {
     "@types/express": "^4.17.2",
     "@types/http-errors": "^1.6.3",
+    "@types/ioredis": "^4.14.6",
     "@types/morgan": "^1.7.37",
     "@types/node": "^13.5.0",
+    "@types/redis": "^2.8.14",
     "@types/socket.io-client": "^1.4.32",
+    "@types/socket.io-redis": "^1.0.25",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "eslint": "^6.8.0",
@@ -29,7 +33,10 @@
   "dependencies": {
     "@types/socket.io": "^2.1.4",
     "express": "^4.17.1",
+    "ioredis": "^4.14.1",
     "morgan": "^1.9.1",
-    "socket.io": "^2.3.0"
+    "redis": "^2.8.0",
+    "socket.io": "^2.3.0",
+    "socket.io-redis": "^5.2.0"
   }
 }

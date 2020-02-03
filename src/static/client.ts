@@ -5,7 +5,7 @@ const socket = SocketIOClientStatic.connect("http://192.168.90.200:6003");
 socket.on("connection", function() {
     log("connection");
 });
-socket.on("chat message", (msg: any) => {
+socket.on("chat", (msg: any) => {
     log(msg);
 });
 socket.on("disconnect", function() {

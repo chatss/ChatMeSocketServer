@@ -3,51 +3,73 @@ import http from "http";
 import SocketIOStatic from "socket.io";
 import { info, log } from "console";
 import { disconnect } from "cluster";
+import redis from "socket.io-redis";
 
 const server = new http.Server(app);
 const io = SocketIOStatic(server);
 const port = process.env.PORT || 6003;
 
-// app.set("io", io);
-// const PrivateRoom = io.of("/PrivateRoom");
-// const PublicRoom = io.of("/PublicRoom");
+io.adapter(redis({ host: "localhost", port: 6379 }));
 
-io.on("connection", (socket) => {
-    log("User is connected in io");
+var numUsers = 0;
+io.on("connection", (socket: any) => {
+    var addedUser = false;
 
-    socket.on("chat message", (msg) => {
-        log("User sent a message : ", msg);
-        io.emit("chat message", msg);
+    socket.join("test");
+    // when the client emits 'new message', this listens and executes
+    socket.on("new message", (data: any) => {
+        // we tell the client to execute 'new message'
+        socket.broadcast.emit("new message", {
+            username: socket.username,
+            message: data,
+        });
     });
 
+    // when the client emits 'add user', this listens and executes
+    socket.on("add user", (username: any) => {
+        if (addedUser) return;
+
+        // we store the username in the socket session for this client
+        socket.username = username;
+        ++numUsers;
+        addedUser = true;
+        socket.emit("login", {
+            numUsers: numUsers,
+        });
+        // echo globally (all clients) that a person has connected
+        socket.broadcast.emit("user joined", {
+            username: socket.username,
+            numUsers: numUsers,
+        });
+    });
+
+    // when the client emits 'typing', we broadcast it to others
+    socket.on("typing", () => {
+        socket.broadcast.emit("typing", {
+            username: socket.username,
+        });
+    });
+
+    // when the client emits 'stop typing', we broadcast it to others
+    socket.on("stop typing", () => {
+        socket.broadcast.emit("stop typing", {
+            username: socket.username,
+        });
+    });
+
+    // when the user disconnects.. perform this
     socket.on("disconnect", () => {
-        log("User is disconnected in io");
+        if (addedUser) {
+            --numUsers;
+
+            // echo globally that this client has left
+            socket.broadcast.emit("user left", {
+                username: socket.username,
+                numUsers: numUsers,
+            });
+        }
     });
 });
-
-// PrivateRoom.on("connection", (socket) => {
-//     log("User is connected in PrivateRomm");
-
-//     socket.on("chat message", (msg) => {
-//         io.emit("chat message", msg);
-//     });
-
-//     socket.on("disconnect", () => {
-//         log("User is disconnected in PrivateRomm");
-//     });
-// });
-// PublicRoom.on("connection", (socket) => {
-//     log("User is connected in PublicRoom");
-
-//     socket.on("chat message", (msg) => {
-//         io.emit("chat message", msg);
-//     });
-
-//     socket.on("disconnect", () => {
-//         log("User is disconnected in PublicRoom");
-//     });
-// });
-
 (async () => {
     server.listen(port, () => info(`Server running on port ${port}`));
 })();

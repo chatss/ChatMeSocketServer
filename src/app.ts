@@ -1,21 +1,16 @@
 import express from "express";
 import createError from "http-errors";
 import morgan from "morgan";
+import path from "path";
 
 const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req: express.Request, res: express.Response) => {
-    res.sendFile(__dirname + "/static/index.html");
-});
-app.get("/PrivateRoom", (req: express.Request, res: express.Response) => {
-    res.sendFile(__dirname + "/static/PrivateRoom.html");
-});
-app.get("/PublicRoom", (req: express.Request, res: express.Response) => {
-    res.sendFile(__dirname + "/static/PublicRoom.html");
-});
+import router from "./api/index.route";
+app.use("/", router);
 
 app.use((req, res, next) => {
     next(createError(404));
