@@ -1,19 +1,18 @@
 import Redis from "ioredis";
 import { Router, Request, Response, NextFunction } from "express";
+import AuthRouter from "./auth/auth.route";
 
 const router = Router();
 const redis = new Redis(6379, "127.0.0.1");
 
+router.use("/auth", AuthRouter);
+
 router.get("/test", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const set = redis.set("test3", "This is test2 value");
-        redis.get("test3", (err, result) => {
-            console.log(set);
-            res.json(result);
-        });
-    } catch (error) {
-        error.status = 400;
-        next(error);
+    if (req.session?.key) {
+        res.render("admin.html");
+    } else {
+        console.log("session 이 없어서 홈으로 이동");
+        res.render("client.html");
     }
 });
 
