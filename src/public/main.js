@@ -14,12 +14,14 @@ $(function() {
 
     // Prompt for setting a username
     var username;
+    var RoomName;
     var connected = false;
     var typing = false;
     var lastTypingTime;
-    var $currentInput = $usernameInput.focus();
+    var $currentInput = $usernameInput;
+    // var $currentInput = $usernameInput.focus();
 
-    const RoomName = "ROOMNAME";
+    var $RoomNameInput = $(".RoomNameInput"); // Input for username
 
     // TODO - Change your url
     const URL = "192.168.90.200:6003";
@@ -44,13 +46,26 @@ $(function() {
             $loginPage.fadeOut();
             $chatPage.show();
             $loginPage.off("click");
-            $currentInput = $inputMessage.focus();
+            // $currentInput = $inputMessage.focus();
 
             // Tell the server your username
             socket.emit("add user", RoomName, username);
         }
     };
+    const setRoomName = () => {
+        RoomName = cleanInput($RoomNameInput.val().trim());
 
+        // If the username is valid
+        if (username) {
+            $loginPage.fadeOut();
+            $chatPage.show();
+            $loginPage.off("click");
+            // $currentInput = $inputMessage.focus();
+
+            // Tell the server your username
+            socket.emit("add user", RoomName, username);
+        }
+    };
     // Sends a chat message
     const sendMessage = () => {
         var message = $inputMessage.val();
@@ -73,6 +88,7 @@ $(function() {
         var $el = $("<li>")
             .addClass("log")
             .text(message);
+        console.log(message);
         addMessageElement($el, options);
     };
 
@@ -196,7 +212,7 @@ $(function() {
     $window.keydown((event) => {
         // Auto-focus the current input when a key is typed
         if (!(event.ctrlKey || event.metaKey || event.altKey)) {
-            $currentInput.focus();
+            // $currentInput.focus();
         }
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
@@ -206,6 +222,7 @@ $(function() {
                 typing = false;
             } else {
                 setUsername();
+                setRoomName();
             }
         }
     });
@@ -234,15 +251,15 @@ $(function() {
 
     // Click events
 
-    // Focus input when clicking anywhere on login page
-    $loginPage.click(() => {
-        $currentInput.focus();
-    });
+    // // Focus input when clicking anywhere on login page
+    // $loginPage.click(() => {
+    //     $currentInput.focus();
+    // });
 
-    // Focus input when clicking on the message input's border
-    $inputMessage.click(() => {
-        $inputMessage.focus();
-    });
+    // // Focus input when clicking on the message input's border
+    // $inputMessage.click(() => {
+    //     $inputMessage.focus();
+    // });
 
     // Socket events
 
