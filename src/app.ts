@@ -10,9 +10,9 @@ const app = express();
 const RedisStore = store(session);
 const RedisClient = redis.createClient();
 
-app.set("views", path.join(__dirname, "static"));
-app.engine("html", require("ejs").renderFile);
-app.set("view engine", "html");
+// app.set("views", path.join(__dirname, "static"));
+// app.engine("html", require("ejs").renderFile);
+// app.set("view engine", "html");
 
 app.use(morgan("dev"));
 app.use(express.json());

@@ -19,10 +19,8 @@ $(function() {
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
 
-    const RoomName = "ROOMNAME";
-
     // TODO - Change your url
-    const URL = "192.168.90.200:6003";
+    const URL = "192.168.90.200:6003/room1";
     var socket = io(URL, { transports: ["websocket"] });
 
     const addParticipantsMessage = (data) => {
@@ -47,7 +45,7 @@ $(function() {
             $currentInput = $inputMessage.focus();
 
             // Tell the server your username
-            socket.emit("add user", RoomName, username);
+            socket.emit("add user", username);
         }
     };
 
@@ -64,7 +62,7 @@ $(function() {
                 message: message,
             });
             // tell server to execute 'new message' and send along one parameter
-            socket.emit("new message", RoomName, message);
+            socket.emit("new message", message);
         }
     };
 
@@ -165,7 +163,7 @@ $(function() {
                 var typingTimer = new Date().getTime();
                 var timeDiff = typingTimer - lastTypingTime;
                 if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-                    socket.emit("stop typing", RoomName);
+                    socket.emit("stop typing");
                     typing = false;
                 }
             }, TYPING_TIMER_LENGTH);
@@ -202,7 +200,7 @@ $(function() {
         if (event.which === 13) {
             if (username) {
                 sendMessage();
-                socket.emit("stop typing", RoomName);
+                socket.emit("stop typing");
                 typing = false;
             } else {
                 setUsername();
@@ -222,7 +220,7 @@ $(function() {
                     message: message,
                 });
                 // tell server to execute 'new message' and send along one parameter
-                socket.emit("new message", RoomName, message);
+                socket.emit("new message", message);
             }
         };
         sendDateMessage();
@@ -292,7 +290,7 @@ $(function() {
     socket.on("reconnect", () => {
         log("you have been reconnected");
         if (username) {
-            socket.emit("add user", RoomName, username);
+            socket.emit("add user", username);
         }
     });
 

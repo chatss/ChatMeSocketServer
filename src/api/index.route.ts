@@ -15,5 +15,4 @@ router.get("/test", async (req: Request, res: Response, next: NextFunction) => {
         res.render("client.html");
     }
 });
-
 export default router;

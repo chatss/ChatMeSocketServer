@@ -8,4 +8,5 @@ router.delete("/logout", AuthController.logout);
 router.get("/verify", AuthController.verify);
 router.get("/profile", AuthController.profile);
 
+
 export default router;
