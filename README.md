@@ -1,7 +1,7 @@
-1. Requirement
+# 1. Requirement
 - redis store in your machine
 
-2. How to use?  
+# 2. How to use?  
 
 ```
 npm install
@@ -9,7 +9,7 @@ npm start
 ```
 
 
-3. API Docs  
+# 3. API Docs  
 
 [register](#register)  
 [login](#login)  
@@ -143,7 +143,7 @@ npm start
 
 ## **verify**
 ----
-  verify a token saved in client cookie by comparing in server session
+  verify a token saved in client cookie by comparing in server session  
   this is test method to verify token 
 
 * **URL**
@@ -211,3 +211,122 @@ npm start
 
   ```
   ```
+
+
+# 4. socket 
+
+## socket.on 
+
+**new message** 
+---
+
+* **event Name**
+
+  new message
+
+* **data**
+
+  message: string
+  
+* **emit**
+
+  * **event Name**
+    new message 
+
+  * **data:**
+    `{ username: socket.username, message: data }`
+
+**add user**  
+---
+
+* **event Name**
+
+  add user
+
+* **data**
+
+  username: string
+  
+* **emit**
+
+  * **event Name**
+    login 
+
+  * **data:**
+    `{numUsers: numUsers}`
+
+* **emit**
+
+  * **broadcast**
+
+  * **event Name**
+    user joined 
+
+  * **data:**
+    `{username: socket.username, numUsers: numUsers}`
+
+
+**typing**
+---
+
+* **event Name**
+
+  typing
+
+* **data**
+
+  None
+  
+* **emit**
+
+  * **broadcast**
+
+  * **event Name**
+    typing 
+
+  * **data:**
+    `{username: socket.username}`
+
+
+**stop typing**
+---
+
+* **event Name**
+
+  stop typing
+
+* **data**
+
+  None
+  
+* **emit**
+
+  * **broadcast**
+
+  * **event Name**
+    stop typing 
+
+  * **data:**
+    `{username: socket.username}`
+
+
+**disconnect**
+---
+
+* **event Name**
+
+  user left
+
+* **data**
+
+  None
+  
+* **emit**
+
+  * **broadcast**
+
+  * **event Name**
+    stop typing 
+
+  * **data:**
+    `{ username: socket.username, numUsers: numUsers }`

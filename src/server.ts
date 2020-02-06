@@ -15,7 +15,6 @@ var numUsers = 0;
 io.on("connection", (socket: any) => {
     var addedUser = false;
 
-    socket.join("test");
     // when the client emits 'new message', this listens and executes
     socket.on("new message", (data: any) => {
         // we tell the client to execute 'new message'
