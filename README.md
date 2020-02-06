@@ -1,5 +1,6 @@
 # 1. Requirement
 - redis store in your machine
+- change URL to yours in src/public/main.js 23 line (ex localhost:6003)  
 
 # 2. How to use?  
 
@@ -7,6 +8,7 @@
 npm install
 npm start
 ```
+http://localhost:6003
 
 
 # 3. API Docs  
