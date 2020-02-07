@@ -4,7 +4,9 @@ import SocketIOStatic from "socket.io";
 import { info, log } from "console";
 import { disconnect } from "cluster";
 import redis from "socket.io-redis";
+import ioRedis from "ioredis";
 
+const ioredis = new ioRedis();
 const server = new http.Server(app);
 const io = SocketIOStatic(server);
 const port = process.env.PORT || 6003;
@@ -20,6 +22,7 @@ io.on("connection", (socket: any) => {
 
     // when the client emits 'new message', this listens and executes
     socket.on("new message", (RoomName: string, data: any) => {
+        ioredis.sadd(`Room-${RoomName}`, `${socket.username}-${data}`);
         // we tell the client to execute 'new message'
         socket.join(RoomName, () => {
             io.to(RoomName).emit("new message", {

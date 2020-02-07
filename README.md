@@ -18,6 +18,7 @@ http://localhost:6003
 [logout](#logout)  
 [verify](#verify)  
 [profile](#profile)  
+[messages](#messages)  
 
 
 **register User**
@@ -213,6 +214,41 @@ http://localhost:6003
 
   ```
   ```
+## **messages**
+----
+  Returns all chat data in room
+
+* **URL**
+
+  /room/:roomname
+
+* **Method:**
+
+  `GET`
+  
+* **URL Params**  
+
+  roomname : roomid
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** `["leesin-Fri Feb 07 2020 12:04:07 GMT+0900 (한국 표준시)","elise-Fri Feb 07 2020 12:03:22 GMT+0900 (한국 표준시)",]`
+ 
+* **Error Response:**
+
+  * **Code:** 400 NOT FOUND <br />
+    **Content:** None
+
+* **Sample:**
+
+  ```
+  ```
+
 
 
 # 4. socket 
@@ -226,16 +262,20 @@ http://localhost:6003
 
   new message
 
-* **data**
+* **args**  
 
-  message: string
+  * **info**  
+    `{ RoomName: string, sender: string }`
+
+  * **data:**  
+    `message`
   
 * **emit**
 
   * **event Name**
     new message 
 
-  * **data:**
+  * **data:**  
     `{ username: socket.username, message: data }`
 
 **add user**  
@@ -245,16 +285,20 @@ http://localhost:6003
 
   add user
 
-* **data**
+* **args**
 
-  username: string
+  * **info**  
+    `{ RoomName: string, sender: string }`
+
+  * **data:**   
+    `username: string`
   
 * **emit**
 
   * **event Name**
     login 
 
-  * **data:**
+  * **data:**  
     `{numUsers: numUsers}`
 
 * **emit**
@@ -264,7 +308,7 @@ http://localhost:6003
   * **event Name**
     user joined 
 
-  * **data:**
+  * **data:**  
     `{username: socket.username, numUsers: numUsers}`
 
 
@@ -275,9 +319,10 @@ http://localhost:6003
 
   typing
 
-* **data**
+* **args**
 
-  None
+  * **info**  
+    `{ RoomName: string, sender: string }`
   
 * **emit**
 
@@ -286,7 +331,7 @@ http://localhost:6003
   * **event Name**
     typing 
 
-  * **data:**
+  * **data:**  
     `{username: socket.username}`
 
 
@@ -297,9 +342,10 @@ http://localhost:6003
 
   stop typing
 
-* **data**
+* **args**
 
-  None
+  * **info**  
+    `{ RoomName: string, sender: string }`
   
 * **emit**
 
@@ -308,7 +354,7 @@ http://localhost:6003
   * **event Name**
     stop typing 
 
-  * **data:**
+  * **data:**  
     `{username: socket.username}`
 
 
@@ -319,9 +365,11 @@ http://localhost:6003
 
   user left
 
-* **data**
+* **args**
 
-  None
+  * **info**   
+    `{ RoomName: string, sender: string }`
+  
   
 * **emit**
 
