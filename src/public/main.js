@@ -226,24 +226,24 @@ $(function() {
             }
         }
     });
-    setInterval(() => {
-        const sendDateMessage = () => {
-            var message = new Date();
-            // Prevent markup from being injected into the message
-            message = cleanInput(message);
-            // if there is a non-empty message and a socket connection
-            if (message && connected) {
-                $inputMessage.val("");
-                addChatMessage({
-                    username: username,
-                    message: message,
-                });
-                // tell server to execute 'new message' and send along one parameter
-                socket.emit("new message", RoomName, message);
-            }
-        };
-        sendDateMessage();
-    }, 1000);
+    // setInterval(() => {
+    //     const sendDateMessage = () => {
+    //         var message = new Date();
+    //         // Prevent markup from being injected into the message
+    //         message = cleanInput(message);
+    //         // if there is a non-empty message and a socket connection
+    //         if (message && connected) {
+    //             $inputMessage.val("");
+    //             addChatMessage({
+    //                 username: username,
+    //                 message: message,
+    //             });
+    //             // tell server to execute 'new message' and send along one parameter
+    //             socket.emit("new message", RoomName, message);
+    //         }
+    //     };
+    //     sendDateMessage();
+    // }, 1000);
 
     $inputMessage.on("input", () => {
         updateTyping();

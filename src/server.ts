@@ -91,7 +91,7 @@ room1.on("connection", (socket: any) => {
     // when the client emits 'new message', this listens and executes
     socket.on("new message", (data: any) => {
         // we tell the client to execute 'new message'
-        socket.broadcast.emit("new message", {
+        socket.to.emit("new message", {
             username: socket.username,
             message: data,
         });
@@ -109,7 +109,7 @@ room1.on("connection", (socket: any) => {
             numUsers: numUsers,
         });
         // echo globally (all clients) that a person has connected
-        socket.broadcast.emit("user joined", {
+        socket.to.emit("user joined", {
             username: socket.username,
             numUsers: numUsers,
         });
@@ -117,14 +117,14 @@ room1.on("connection", (socket: any) => {
 
     // when the client emits 'typing', we broadcast it to others
     socket.on("typing", () => {
-        socket.broadcast.emit("typing", {
+        socket.in.emit("typing", {
             username: socket.username,
         });
     });
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on("stop typing", () => {
-        socket.broadcast.emit("stop typing", {
+        socket.in.emit("stop typing", {
             username: socket.username,
         });
     });
