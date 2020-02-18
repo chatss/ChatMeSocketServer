@@ -1,0 +1,174 @@
+swagger: "2.0"
+info:
+    description: API of chatme server
+    version: 0.0.1
+    title: ChatMe API Collections
+    contact:
+        email: lenon461@gmail.com
+    license:
+        name: Apache 2.0
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+        host: "localhost:8989"
+basePath: /
+tags:
+    - name: auth
+      description: Authentication
+    - name: server
+      description: Namespace of Socket
+    - name: channel
+      description: Room in Namespace
+      # externalDocs:
+      #   description: Find out more
+      #   url: 'http://swagger.io'
+schemes:
+    - http
+paths:
+    /auth/register:
+        post:
+            tags:
+                - auth
+            summary: sign up an user
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - in: body
+                  name: body
+                  schema:
+                      $ref: "#/definitions/register"
+            responses:
+                "201":
+                    description: Created
+                "409":
+                    description: Confilct
+    /auth/login:
+        put:
+            tags:
+                - auth
+            summary: sign in an user
+            description: "new accesstoken issued in session"
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - in: body
+                  name: body
+                  schema:
+                      $ref: "#/definitions/register"
+            responses:
+                "202":
+                    description: Success
+                "401":
+                    description: Unauthorized
+                "403":
+                    description: Forbidden
+    /auth/logout:
+        delete:
+            tags:
+                - auth
+            summary: logout an user
+            description: "destory a session"
+            responses:
+                "205":
+                    description: Reset Content
+    /server:  
+        get:
+            tags:
+                - server
+            summary: Return all of servers
+            parameters:
+                - in: body
+                  name: body
+            responses:
+                "200":
+                    description: Success
+        post:
+            tags:
+                - server
+            summary: Create a server
+            parameters:
+                - in: body
+                  name: body
+            responses:
+                "200":
+                    description: Success
+    /server/{servername}/user:
+        get:
+            tags:
+                - server
+            summary: Return users in server
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - in: path
+                    name: servername
+                    description: "The servername that entered."
+                    required: true
+            responses:
+                "200":
+                    description: Success
+                "400":
+                    description: Bad Request 
+    /server/{servername}/channel:
+        get:
+            tags:
+                - channel
+            summary: Return all of channels
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: Success
+                "400":
+                    description: Bad Request
+        post:
+            tags:
+                - channel
+            summary: Create a channel
+            parameters:
+                - in: body
+                    name: body
+            responses:
+                "200":
+                    description: Success
+    /server/{servername}/channel/{channelname}/messages:
+        get:
+            tags:
+                - channel
+            summary: Return chat data in channel
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - in: path
+                    name: channelname
+                    description: "The channelname that entered."
+                    required: true
+                - in: query
+                    name: offset
+                - in: query
+                    name: max
+            responses:
+                "200":
+                    description: Success
+                "400":
+                    description: Bad Request
+                    
+definitions:
+    register:
+        type: object
+        properties:
+            id:
+                type: string
+            password:
+                type: string
+externalDocs:
+    description: Find out more about Swagger
+    url: "http://swagger.io"

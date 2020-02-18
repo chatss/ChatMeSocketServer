@@ -15,6 +15,7 @@ export default class AuthService {
     }
     async register(payload: any): Promise<void> {
         try {
+            console.log(payload);
             const result = await redis.set(payload.id, JSON.stringify(payload));
             if (result !== "OK") {
                 throw new Error("redis set now throw OK");

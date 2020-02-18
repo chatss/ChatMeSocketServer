@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as RoomController from "./room.ctrl";
 const router = Router();
 
-router.get("/:roomname", RoomController.messages);
+router.get("/", RoomController.messages);
+router.post("/", RoomController.createRoom);
 
 export default router;

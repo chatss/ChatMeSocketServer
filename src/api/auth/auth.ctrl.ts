@@ -43,6 +43,8 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 
 export const verify = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log(req.session);
+        console.log(req.sessionID);
         const result = jwt.verify(req.session!.accesstoken, "config.jwtSecret");
         res.json(result);
     } catch (error) {

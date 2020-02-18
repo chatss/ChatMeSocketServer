@@ -6,6 +6,10 @@ import session from "express-session";
 import redis from "redis";
 import store from "connect-redis";
 
+import swaggerUi from "swagger-ui-express";
+import yaml from "yamljs";
+const swaggeryaml = yaml.load("./swagger/swagger.yaml");
+
 const app = express();
 const RedisStore = store(session);
 const RedisClient = redis.createClient();
@@ -17,12 +21,16 @@ const RedisClient = redis.createClient();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggeryaml));
 app.use(
     session({
         store: new RedisStore({ client: RedisClient }),
         resave: false,
         saveUninitialized: true,
         secret: "THISHIHFEFNWLF@",
+        cookie: {
+            maxAge: 1000 * 60 * 60,
+        },
     }),
 );
 
