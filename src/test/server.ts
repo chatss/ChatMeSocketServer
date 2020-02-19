@@ -1,4 +1,4 @@
-import app from "./app";
+import app from "../app";
 import http from "http";
 import SocketIOStatic from "socket.io";
 import { info, log } from "console";

@@ -11,4 +11,5 @@ socket.on("new message", (msg: any) => {
 socket.on("disconnect", function() {
     log("disconnect");
 });
+
 socket.emit("new message", "hi server? im client");

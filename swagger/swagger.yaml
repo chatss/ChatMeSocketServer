@@ -17,6 +17,8 @@ tags:
       description: Namespace of Socket
     - name: channel
       description: Room in Namespace
+    - name: socket
+      description: Socket event docs -- ( Get - On, Post - Emit )
       # externalDocs:
       #   description: Find out more
       #   url: 'http://swagger.io'
@@ -160,7 +162,30 @@ paths:
                     description: Success
                 "400":
                     description: Bad Request
-                    
+    test:
+        get:
+            tags:
+                - socket
+            summary: Return all of channels
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: Success
+                "400":
+                    description: Bad Request
+        post:
+            tags:
+                - socket
+            summary: Create a channel
+            parameters:
+                - in: body
+                    name: body
+            responses:
+                "200":
+                    description: Success
 definitions:
     register:
         type: object
