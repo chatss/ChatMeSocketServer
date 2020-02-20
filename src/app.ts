@@ -1,3 +1,4 @@
+// import "reflect-metadata";
 import express from "express";
 import createError from "http-errors";
 import morgan from "morgan";
@@ -5,6 +6,7 @@ import path from "path";
 import session from "express-session";
 import redis from "redis";
 import store from "connect-redis";
+import { ApolloServer, gql } from "apollo-server-express";
 
 import swaggerUi from "swagger-ui-express";
 import yaml from "yamljs";
@@ -13,10 +15,6 @@ const swaggeryaml = yaml.load("./swagger/swagger.yaml");
 const app = express();
 const RedisStore = store(session);
 const RedisClient = redis.createClient();
-
-// app.set("views", path.join(__dirname, "static"));
-// app.engine("html", require("ejs").renderFile);
-// app.set("view engine", "html");
 
 app.use(morgan("dev"));
 app.use(express.json());

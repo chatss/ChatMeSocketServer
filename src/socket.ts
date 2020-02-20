@@ -15,9 +15,10 @@ const websocket = (app: any, server: any) => {
 
     const dynamicNsp = io.of(/^\/server-.+$/);
 
+    var numUsers = 0;
     dynamicNsp.on("connect", (socket) => {
         const newNamespace = socket.nsp; // newNamespace.name === '/server-101'
-        log(socket.nsp.name + x + " connected");
+        log(socket.nsp.name + " connected");
         const req = socket.request;
         const {
             headers: { origin },
@@ -25,6 +26,15 @@ const websocket = (app: any, server: any) => {
         const roomId = origin.split("/")[origin.split("/").length - 1].replace(/\?.+/, "");
         log(roomId);
         socket.join(roomId);
+
+        socket.on("add user", (data) => {
+            numUsers++;
+            log(data + " is joined");
+            // echo globally (all clients) that a person has connected
+            dynamicNsp.emit("login", {
+                numUsers: numUsers,
+            });
+        });
 
         socket.on("new message", (msg: any) => {
             log("server recived: " + msg);

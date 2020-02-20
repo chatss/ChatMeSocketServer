@@ -49,7 +49,7 @@ $(function() {
             // $currentInput = $inputMessage.focus();
 
             // Tell the server your username
-            socket.emit("add user", RoomName, username);
+            socket.emit("add user", username);
         }
     };
     const setRoomName = () => {
@@ -63,7 +63,7 @@ $(function() {
             // $currentInput = $inputMessage.focus();
 
             // Tell the server your username
-            socket.emit("add user", RoomName, username);
+            socket.emit("add user", username);
         }
     };
     // Sends a chat message
@@ -72,14 +72,18 @@ $(function() {
         // Prevent markup from being injected into the message
         message = cleanInput(message);
         // if there is a non-empty message and a socket connection
+        console.log("before message && connected");
+        console.log(message);
+        console.log(connected);
         if (message && connected) {
             $inputMessage.val("");
+            console.log("message && connected");
             addChatMessage({
                 username: username,
                 message: message,
             });
             // tell server to execute 'new message' and send along one parameter
-            socket.emit("new message", RoomName, message);
+            socket.emit("new message", message);
         }
     };
 
@@ -95,6 +99,7 @@ $(function() {
     // Adds the visual chat message to the message list
     const addChatMessage = (data, options) => {
         // Don't fade the message in if there is an 'X was typing'
+        console.log(data);
         var $typingMessages = getTypingMessages(data);
         options = options || {};
         if ($typingMessages.length !== 0) {
@@ -309,7 +314,7 @@ $(function() {
     socket.on("reconnect", () => {
         log("you have been reconnected");
         if (username) {
-            socket.emit("add user", RoomName, username);
+            socket.emit("add user", username);
         }
     });
 
