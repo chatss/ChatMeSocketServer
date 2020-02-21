@@ -28,10 +28,8 @@ export class UserResolver {
     async changeName(@Arg("id") id: string, @Arg("name") name: string) {
         try {
             const UserDBO = await User.findOne({ where: { id } });
-            console.log(UserDBO);
             UserDBO!.name = name;
             const UserDBI = User.create({ ...UserDBO });
-            console.log(UserDBI);
             await User.save(UserDBI);
         } catch (err) {
             console.warn(err);

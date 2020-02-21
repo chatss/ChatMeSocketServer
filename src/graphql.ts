@@ -5,7 +5,7 @@ import { ApolloServer } from "apollo-server";
 import Database from "./database";
 
 const database = new Database();
-const LoggingExtension = require("./logging");
+// const LoggingExtension = require("./logging");
 
 async function bootstrap() {
     const connection = await database.getConnection();
@@ -22,7 +22,7 @@ async function bootstrap() {
                 "editor.theme": "light",
             },
         },
-        extensions: [() => new LoggingExtension()],
+        // extensions: [() => new LoggingExtension()],
     });
 
     return server;
