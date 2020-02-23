@@ -20,7 +20,7 @@ $(function() {
     var $currentInput = $usernameInput.focus();
 
     // TODO - Change your url
-    const URL = "192.168.90.200:6003/room1";
+    const URL = "localhost:6003/room1";
     var socket = io(URL, { transports: ["websocket"] });
 
     const addParticipantsMessage = (data) => {

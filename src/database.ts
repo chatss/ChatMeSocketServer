@@ -20,7 +20,7 @@ export default class Database {
             entities,
             password,
             type: (process.env.TYPEORM_CONNECTION as any) || "postgres",
-            host: process.env.TYPEORM_HOST || "192.168.90.200",
+            host: process.env.TYPEORM_HOST || "localhost",
             database: process.env.TYPEORM_DATABASE || "chatme",
             username: process.env.TYPEORM_USERNAME || "postgres",
             port: parseInt(process.env.TYPEORM_PORT || "5432", 10),

@@ -24,7 +24,7 @@ $(function() {
     var $RoomNameInput = $(".RoomNameInput"); // Input for username
 
     // TODO - Change your url
-    const URL = "192.168.90.200:6003/server-28HC6ppWD6HovTJ583ipkW2RndRMcWb+y9d+o9sLiaw=";
+    const URL = "localhost:6003/server-28HC6ppWD6HovTJ583ipkW2RndRMcWb+y9d+o9sLiaw=";
     var socket = io(URL, { transports: ["websocket"] });
 
     const addParticipantsMessage = (data) => {
