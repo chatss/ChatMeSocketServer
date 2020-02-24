@@ -23,9 +23,9 @@ const websocket = (app: any, server: any) => {
         const {
             headers: { origin },
         } = req;
-        const roomId = origin.split("/")[origin.split("/").length - 1].replace(/\?.+/, "");
-        log(roomId);
-        socket.join(roomId);
+        // const roomId = origin.split("/")[origin.split("/").length - 1].replace(/\?.+/, "");
+        log(origin);
+        // socket.join(roomId);
 
         socket.on("add user", (data) => {
             numUsers++;
@@ -37,10 +37,8 @@ const websocket = (app: any, server: any) => {
         });
 
         socket.on("new message", (msg: any) => {
-            log("server recived: " + msg);
-            socket.emit("new message", "server received some message");
-            log("server sending a message to room0");
-            dynamicNsp.to("room0").emit("new message", "i received your message");
+            ioredis.sadd(socket.nsp.name, msg);
+            dynamicNsp.emit("new message", msg);
         });
 
         socket.on("disconnect", () => {

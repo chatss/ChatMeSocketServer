@@ -4,9 +4,9 @@ const asyncRedis = require("async-redis");
 const redis = asyncRedis.createClient();
 
 export const messages = async (req: Request, res: Response, next: NextFunction) => {
-    const roomname = req.query.roomname;
+    const roomname = req.query.nsp;
     try {
-        const result = await redis.smembers(`Room-${roomname}`);
+        const result = await redis.smembers(`${roomname}`);
         console.log(result);
         res.json(result);
     } catch (error) {

@@ -1,14 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToMany, JoinColumn, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToMany, JoinColumn, JoinTable, BaseEntity } from "typeorm";
+import { ObjectType, Field, Int, ID } from "type-graphql";
 import User from "./User";
 
+@ObjectType()
 @Entity()
-export default class Server {
+export default class Server extends BaseEntity {
+    @Field()
     @PrimaryGeneratedColumn()
     public id!: number;
 
+    @Field()
     @Column()
     public name!: string;
 
+    @Field()
     @Column()
     public namespace!: string;
 
