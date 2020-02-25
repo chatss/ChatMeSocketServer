@@ -12,19 +12,21 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         res.status(201);
         res.send({ id: payload.id });
     } catch (error) {
-        error.status = 400;
+        error.status = 401;
         next(error);
     }
 };
 export const login = async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
     try {
+        console.log(payload);
         await AuthServiceCtrl.login(payload);
+        console.log(payload);
         const accesstoken = jwt.sign(payload, "config.jwtSecret", { expiresIn: "60m" });
         req.session!.accesstoken = accesstoken;
         res.sendStatus(202);
     } catch (error) {
-        error.status = 400;
+        error.status = 402;
         next(error);
     }
 };

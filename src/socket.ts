@@ -38,6 +38,7 @@ const websocket = (app: any, server: any) => {
 
         socket.on("new message", (msg: any) => {
             ioredis.sadd(socket.nsp.name, msg);
+            console.log("received: " + msg);
             dynamicNsp.emit("new message", msg);
         });
 

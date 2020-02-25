@@ -7,6 +7,7 @@ import session from "express-session";
 import redis from "redis";
 import store from "connect-redis";
 import { ApolloServer, gql } from "apollo-server-express";
+import cors from "cors";
 
 import swaggerUi from "swagger-ui-express";
 import yaml from "yamljs";
@@ -31,6 +32,7 @@ app.use(
         },
     }),
 );
+app.use(cors());
 
 import router from "./api/index.route";
 app.use("/", router);

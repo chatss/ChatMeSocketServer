@@ -10,7 +10,7 @@ export class ServerResolver {
     }
 
     @Mutation(() => String)
-    async createServer(@Arg("owner") owner: string) {
+    async createServer(@Arg("name") name: string, @Arg("owner") owner: string) {
         try {
             const UserDBO = await User.findOne({ where: { id: owner } });
             const hash = crypto
@@ -18,11 +18,32 @@ export class ServerResolver {
                 .update(new Date().toString())
                 .digest("base64");
             await Server.insert({
-                name: UserDBO!.name,
+                name,
                 namespace: hash,
                 Owner: UserDBO,
             });
             return hash;
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+    @Mutation(() => Server)
+    async joinServer(@Arg("nsp") nsp: string) {
+        try {
+            const ServerDBO = await Server.findOne({ where: { namespace: nsp } });
+            S
+            return ServerDBO;
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+    @Query(() => [Server])
+    async myServer(@Arg("id") id: string) {
+        try {
+            const ServerDBO = await Server.find({ where: { Owner: id } });
+            return ServerDBO;
         } catch (err) {
             console.warn(err);
             return false;

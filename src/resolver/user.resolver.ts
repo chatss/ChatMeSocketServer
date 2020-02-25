@@ -37,4 +37,16 @@ export class UserResolver {
         }
         return true;
     }
+
+    @Mutation(() => Boolean)
+    async login(@Arg("id") id: string, @Arg("password") password: string) {
+        try {
+            const UserDBO = await User.findOne({ where: { id } });
+            if (UserDBO!.password !== password) return false;
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+        return true;
+    }
 }

@@ -1,5 +1,6 @@
 const asyncRedis = require("async-redis");
 const redis = asyncRedis.createClient();
+import User from "../../entity/User";
 
 export default class AuthService {
     async duplicateCheck(id: string): Promise<void> {
@@ -24,11 +25,13 @@ export default class AuthService {
             throw new Error(error);
         }
     }
-    async login(payload: any): Promise<void> {
+    async login(payload: any): Promise<User> {
         try {
-            const result = await redis.get(payload.id);
-            const { id, password } = JSON.parse(result);
-            if (payload.password !== password) throw new Error("password is wrong");
+            console.log(payload.id);
+            const user = await User.findOneOrFail({ where: { id: payload.id } });
+            if (!user) throw new Error("not exist id");
+            if (payload.password !== user!.password) throw new Error("password is wrong");
+            return user;
         } catch (error) {
             throw new Error(error);
         }

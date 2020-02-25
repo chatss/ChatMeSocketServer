@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToMany, JoinColumn, JoinTable, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, ManyToMany, JoinColumn, JoinTable, BaseEntity } from "typeorm";
 import { ObjectType, Field, Int, ID } from "type-graphql";
 import User from "./User";
 
@@ -17,14 +17,24 @@ export default class Server extends BaseEntity {
     @Column()
     public namespace!: string;
 
-    @OneToOne((type) => User)
+    @Field()
+    @ManyToOne((type) => User)
     @JoinColumn()
     public Owner!: User;
 
+    @Field(() => [User])
     @ManyToMany((type) => User)
-    @JoinTable()
+    @JoinTable({
+        joinColumn: {
+            name: "fk_manager_id",
+        },
+        inverseJoinColumn: {
+            name: "fk_server_id",
+        },
+    })
     public Manager?: User[];
 
+    @Field(() => [User])
     @ManyToMany((type) => User)
     @JoinTable()
     public Member?: User[];
