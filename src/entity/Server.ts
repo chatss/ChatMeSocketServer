@@ -17,25 +17,21 @@ export default class Server extends BaseEntity {
     @Column()
     public namespace!: string;
 
-    @Field()
-    @ManyToOne((type) => User)
-    @JoinColumn()
+    @Field({ nullable: true })
+    @ManyToOne((type) => User, { cascade: true, eager: true })
+    @JoinColumn({ name: "Owner" })
     public Owner!: User;
 
     @Field(() => [User])
-    @ManyToMany((type) => User)
+    @ManyToMany((type) => User, { cascade: true, eager: true })
     @JoinTable({
-        joinColumn: {
-            name: "fk_manager_id",
-        },
-        inverseJoinColumn: {
-            name: "fk_server_id",
-        },
+        joinColumn: {},
+        inverseJoinColumn: {},
     })
     public Manager?: User[];
 
     @Field(() => [User])
-    @ManyToMany((type) => User)
+    @ManyToMany((type) => User, { cascade: true, eager: true })
     @JoinTable()
     public Member?: User[];
 }

@@ -32,7 +32,6 @@ export class ServerResolver {
     async joinServer(@Arg("nsp") nsp: string) {
         try {
             const ServerDBO = await Server.findOne({ where: { namespace: nsp } });
-            S
             return ServerDBO;
         } catch (err) {
             console.warn(err);
@@ -42,7 +41,28 @@ export class ServerResolver {
     @Query(() => [Server])
     async myServer(@Arg("id") id: string) {
         try {
-            const ServerDBO = await Server.find({ where: { Owner: id } });
+            const ServerDBO = await Server.find({
+                where: { Owner: id },
+            });
+            console.log(ServerDBO);
+            return ServerDBO;
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+    @Query(() => [Server])
+    async myjoinServer(@Arg("id") id: string) {
+        try {
+            const ServerDBO = await Server.find({
+                relations: ["server.serverId"],
+                join: {
+                    alias: "server",
+                    innerJoinAndSelect: {},
+                },
+                // where: { Member: { id } },
+            });
+            console.log(ServerDBO);
             return ServerDBO;
         } catch (err) {
             console.warn(err);

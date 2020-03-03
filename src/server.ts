@@ -11,5 +11,5 @@ const port = process.env.PORT || 6003;
     apollo.listen(6004);
     const server = await app.listen(port, () => info(`Server running on port ${port}`));
 
-    // websocket(app, server);
+    websocket(app, server);
 })();

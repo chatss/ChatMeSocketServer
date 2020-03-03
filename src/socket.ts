@@ -37,9 +37,10 @@ const websocket = (app: any, server: any) => {
         });
 
         socket.on("new message", (msg: any) => {
-            ioredis.sadd(socket.nsp.name, msg);
+            ioredis.lpush(socket.nsp.name, msg);
             console.log("received: " + msg);
-            dynamicNsp.emit("new message", msg);
+            console.log("in: " + socket.nsp.name);
+            console.log(dynamicNsp.emit("new message", msg));
         });
 
         socket.on("disconnect", () => {

@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import crypto from "crypto";
+import ioRedis from "ioredis";
 const asyncRedis = require("async-redis");
-const redis = asyncRedis.createClient();
-
+const redis = new ioRedis();
 export const messages = async (req: Request, res: Response, next: NextFunction) => {
     const roomname = req.query.nsp;
     try {
-        const result = await redis.smembers(`${roomname}`);
+        const result = await redis.lrange(`${roomname}`, 0, 10);
         console.log(result);
         res.json(result);
     } catch (error) {

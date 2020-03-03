@@ -10,7 +10,7 @@ export default class Database {
     }
 
     async connect() {
-        const password = process.env.TYPEORM_PASSWORD || "nodejs15";
+        const password = process.env.TYPEORM_PASSWORD || "kimsky";
         if (!password) {
             throw new Error("Failed to load database password");
         }
