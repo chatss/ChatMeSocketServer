@@ -6,7 +6,8 @@ const redis = new ioRedis();
 export const messages = async (req: Request, res: Response, next: NextFunction) => {
     const roomname = req.query.nsp;
     try {
-        const result = await redis.lrange(`${roomname}`, 0, 10);
+        console.log(roomname);
+        const result = await redis.lrange(`/server-${roomname}`, 0, 10);
         console.log(result);
         res.json(result);
     } catch (error) {

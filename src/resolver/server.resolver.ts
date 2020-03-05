@@ -9,7 +9,7 @@ export class ServerResolver {
         return await Server.find();
     }
 
-    @Mutation(() => String)
+    @Mutation(() => Server)
     async createServer(@Arg("name") name: string, @Arg("owner") owner: string) {
         try {
             const UserDBO = await User.findOne({ where: { id: owner } });
@@ -17,12 +17,14 @@ export class ServerResolver {
                 .createHash("sha256")
                 .update(new Date().toString())
                 .digest("base64");
-            await Server.insert({
+            console.log("createServer");
+            const ServerDBI = Server.create({
                 name,
                 namespace: hash,
                 Owner: UserDBO,
             });
-            return hash;
+            await Server.insert(ServerDBI);
+            return ServerDBI;
         } catch (err) {
             console.warn(err);
             return false;
