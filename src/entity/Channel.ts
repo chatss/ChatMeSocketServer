@@ -3,7 +3,7 @@ import { ObjectType, Field, Int, ID } from "type-graphql";
 import Server from "./Server";
 
 @ObjectType()
-@Entity()
+@Entity("channel", { synchronize: true })
 export default class Channel extends BaseEntity {
     @Field()
     @PrimaryGeneratedColumn()

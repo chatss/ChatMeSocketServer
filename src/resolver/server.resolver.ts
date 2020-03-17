@@ -1,11 +1,13 @@
-import { Resolver, Query, Mutation, Args, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Args, Arg, FieldResolver } from "type-graphql";
 import Server from "../entity/Server";
 import User from "../entity/User";
 import crypto from "crypto";
+import { createQueryBuilder, getManager, getRepository, Any } from "typeorm";
 @Resolver()
 export class ServerResolver {
     @Query(() => [Server])
     async servers() {
+        console.log(await Server.find());
         return await Server.find();
     }
 
@@ -17,13 +19,12 @@ export class ServerResolver {
                 .createHash("sha256")
                 .update(new Date().toString())
                 .digest("base64");
-            console.log("createServer");
             const ServerDBI = Server.create({
                 name,
                 namespace: hash,
-                Owner: UserDBO,
+                members: [User.create({ ...UserDBO })],
             });
-            await Server.insert(ServerDBI);
+            await Server.save(ServerDBI);
             return ServerDBI;
         } catch (err) {
             console.warn(err);
@@ -31,21 +32,40 @@ export class ServerResolver {
         }
     }
     @Mutation(() => Server)
-    async joinServer(@Arg("nsp") nsp: string) {
+    async joinServer(@Arg("nsp") nsp: string, @Arg("member") member: string) {
         try {
             const ServerDBO = await Server.findOne({ where: { namespace: nsp } });
-            return ServerDBO;
+            const UserDBO = await User.findOne({ where: { id: member } });
+            const UserDBI = User.create({ ...UserDBO });
+            ServerDBO!.members!.push(UserDBI);
+            const ServerDBI = Server.create({ ...ServerDBO });
+            console.log(ServerDBI);
+            await Server.save(ServerDBI);
+            return ServerDBI;
         } catch (err) {
             console.warn(err);
             return false;
         }
     }
     @Query(() => [Server])
-    async myServer(@Arg("id") id: string) {
+    async myServers(@Arg("id") id: string) {
         try {
-            const ServerDBO = await Server.find({
-                where: { Owner: id },
-            });
+            const ServerDBO = await getRepository(Server)
+                .createQueryBuilder("server")
+                .leftJoinAndSelect("server.members", "users")
+                .getMany();
+            // const ServerDBO = await Server.find({
+            //     // relations: ["User"],
+            //     join: {
+            //         alias: "S",
+            //         leftJoinAndSelect: {
+            //             s: "S.members",
+            //         },
+            //     },
+            //     where: {
+            //         fk_server_id: id,
+            //     },
+            // });
             console.log(ServerDBO);
             return ServerDBO;
         } catch (err) {

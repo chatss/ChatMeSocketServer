@@ -1,9 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne, ManyToMany, JoinColumn, JoinTable, BaseEntity } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToOne,
+    ManyToOne,
+    OneToMany,
+    ManyToMany,
+    JoinColumn,
+    JoinTable,
+    BaseEntity,
+} from "typeorm";
 import { ObjectType, Field, Int, ID } from "type-graphql";
 import User from "./User";
+import ServerToMember from "./ServerToMember";
 
 @ObjectType()
-@Entity()
+@Entity("server", { synchronize: true })
 export default class Server extends BaseEntity {
     @Field()
     @PrimaryGeneratedColumn()
@@ -17,21 +29,22 @@ export default class Server extends BaseEntity {
     @Column()
     public namespace!: string;
 
-    @Field({ nullable: true })
-    @ManyToOne((type) => User, { cascade: true, eager: true })
-    @JoinColumn({ name: "Owner" })
-    public Owner!: User;
+    // @Field({ nullable: true })
+    // @ManyToOne(() => User, { cascade: true, eager: true })
+    // @JoinColumn({ name: "owner" })
+    // public owner!: User;
 
-    @Field(() => [User])
-    @ManyToMany((type) => User, { cascade: true, eager: true })
-    @JoinTable({
-        joinColumn: {},
-        inverseJoinColumn: {},
-    })
-    public Manager?: User[];
-
-    @Field(() => [User])
-    @ManyToMany((type) => User, { cascade: true, eager: true })
+    @Field(() => [User], { nullable: true })
+    @ManyToMany(
+        () => User,
+        (user) => user.servers,
+    )
     @JoinTable()
-    public Member?: User[];
+    public members?: User[];
+
+    @OneToMany(
+        (type) => ServerToMember,
+        (serverToMember) => serverToMember.server,
+    )
+    public serverToMembers!: ServerToMember[];
 }

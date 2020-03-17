@@ -6,7 +6,6 @@ import path from "path";
 import session from "express-session";
 import redis from "redis";
 import store from "connect-redis";
-import { ApolloServer, gql } from "apollo-server-express";
 import cors from "cors";
 
 import swaggerUi from "swagger-ui-express";
@@ -41,13 +40,20 @@ app.use((req, res, next) => {
     next(createError(404));
 });
 
-app.use((err: createError.HttpError, req: express.Request, res: express.Response, _next: express.NextFunction) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
-    // render the error page
+app.use(
+    (
+        err: createError.HttpError,
+        req: express.Request,
+        res: express.Response,
+        _next: express.NextFunction,
+    ) => {
+        // set locals, only providing error in development
+        res.locals.message = err.message;
+        res.locals.error = req.app.get("env") === "development" ? err : {};
+        // render the error page
 
-    res.status(err.status || 500);
-    res.send(err.message);
-});
+        res.status(err.status || 500);
+        res.send(err.message);
+    },
+);
 export default app;
