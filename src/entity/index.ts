@@ -1,7 +1,7 @@
 import Channel from "./Channel";
 import Server from "./Server";
 import User from "./User";
-// import ServerMembers from "./ServerMembers";
-const entities = [Channel, Server, User];
+import ServerMembersUser from "./ServerMembersUser";
+const entities = [Channel, Server, User, ServerMembersUser];
 
 export default entities;

@@ -12,8 +12,4 @@ export default class Channel extends BaseEntity {
     @Field()
     @Column()
     public name!: string;
-
-    @Field()
-    @ManyToOne((type) => Server)
-    public server!: Server;
 }

@@ -1,6 +1,7 @@
 import { Resolver, Query, Mutation, Args, Arg, FieldResolver } from "type-graphql";
 import Server from "../entity/Server";
 import User from "../entity/User";
+import Member from "../entity/ServerMembersUser";
 import crypto from "crypto";
 import { createQueryBuilder, getManager, getRepository, Any } from "typeorm";
 @Resolver()
@@ -36,37 +37,13 @@ export class ServerResolver {
         try {
             const ServerDBO = await Server.findOne({ where: { namespace: nsp } });
             const UserDBO = await User.findOne({ where: { id: member } });
-            const UserDBI = User.create({ ...UserDBO });
-            ServerDBO!.members!.push(UserDBI);
-            const ServerDBI = Server.create({ ...ServerDBO });
-            console.log(ServerDBI);
-            await Server.save(ServerDBI);
-            return ServerDBI;
-        } catch (err) {
-            console.warn(err);
-            return false;
-        }
-    }
-    @Query(() => [Server])
-    async myServers(@Arg("id") id: string) {
-        try {
-            const ServerDBO = await getRepository(Server)
-                .createQueryBuilder("server")
-                .leftJoinAndSelect("server.members", "users")
-                .getMany();
-            // const ServerDBO = await Server.find({
-            //     // relations: ["User"],
-            //     join: {
-            //         alias: "S",
-            //         leftJoinAndSelect: {
-            //             s: "S.members",
-            //         },
-            //     },
-            //     where: {
-            //         fk_server_id: id,
-            //     },
-            // });
-            console.log(ServerDBO);
+
+            const MemberDBI = Member.create({
+                serverId: ServerDBO?.id,
+                userId: UserDBO?.id,
+                likedAt: new Date(),
+            });
+            await Member.save(MemberDBI);
             return ServerDBO;
         } catch (err) {
             console.warn(err);
@@ -74,17 +51,16 @@ export class ServerResolver {
         }
     }
     @Query(() => [Server])
-    async myjoinServer(@Arg("id") id: string) {
+    async myServers(@Arg("id") id: string) {
+        //* 비동기 처리 추후 문제 가능
         try {
-            const ServerDBO = await Server.find({
-                relations: ["server.serverId"],
-                join: {
-                    alias: "server",
-                    innerJoinAndSelect: {},
-                },
-                // where: { Member: { id } },
+            const MemberDBO = await Member.find({
+                where: { userId: id },
             });
-            console.log(ServerDBO);
+            const MyServersId = MemberDBO.map((Member) => Member.serverId);
+            const ServerDBO = MyServersId.map((id) => {
+                return Server.findOne({ where: { id } });
+            });
             return ServerDBO;
         } catch (err) {
             console.warn(err);

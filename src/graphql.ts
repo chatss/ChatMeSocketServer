@@ -9,7 +9,7 @@ const database = new Database();
 
 async function bootstrap() {
     const connection = await database.getConnection();
-    await connection.dropDatabase();
+    // await connection.dropDatabase();
     const schema = await buildSchema({
         resolvers: [__dirname + "/resolver/**.resolver.ts"],
     });
