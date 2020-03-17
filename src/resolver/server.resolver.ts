@@ -51,11 +51,11 @@ export class ServerResolver {
         }
     }
     @Query(() => [Server])
-    async myServers(@Arg("id") id: string) {
+    async myServers(@Arg("id") owner: string) {
         //* 비동기 처리 추후 문제 가능
         try {
             const MemberDBO = await Member.find({
-                where: { userId: id },
+                where: { userId: owner },
             });
             const MyServersId = MemberDBO.map((Member) => Member.serverId);
             const ServerDBO = MyServersId.map((id) => {
@@ -64,6 +64,22 @@ export class ServerResolver {
             return ServerDBO;
         } catch (err) {
             console.warn(err);
+            return false;
+        }
+    }
+    @Mutation(() => Boolean)
+    async deleteServer(@Arg("id") id: number, @Arg("owner") owner: string) {
+        try {
+            const ServerDBO = await Server.findOne({ where: { id } });
+            const MemberDBO = await Member.find({ where: { userId: owner } });
+            const valid = MemberDBO.some((Member) => {
+                return Member.serverId === ServerDBO?.id;
+            });
+            if (valid && ServerDBO) await Server.remove(ServerDBO);
+            else throw new Error("Invalid to Delete");
+            return true;
+        } catch (error) {
+            console.warn(error);
             return false;
         }
     }

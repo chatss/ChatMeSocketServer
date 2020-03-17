@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany } from "typeorm";
 import { ObjectType, Field, Int, ID } from "type-graphql";
 import Server from "./Server";
 
@@ -12,4 +12,11 @@ export default class Channel extends BaseEntity {
     @Field()
     @Column()
     public name!: string;
+
+    // @Field(() => Server, { name: "server" })
+    @ManyToOne(
+        () => Server,
+        (server) => server.channels,
+    )
+    serverId!: number;
 }

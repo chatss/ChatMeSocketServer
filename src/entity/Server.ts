@@ -12,6 +12,7 @@ import {
 } from "typeorm";
 import { ObjectType, Field, Int, ID } from "type-graphql";
 import User from "./User";
+import Channel from "./Channel";
 
 @ObjectType()
 @Entity("server", { synchronize: true })
@@ -28,6 +29,7 @@ export default class Server extends BaseEntity {
     @Column()
     public namespace!: string;
 
+    @Field(() => [User])
     @ManyToMany(() => User, { eager: true })
     @JoinTable({
         joinColumn: {
@@ -39,6 +41,13 @@ export default class Server extends BaseEntity {
             referencedColumnName: "id",
         },
     })
-    @Field(() => [User])
     public members?: User[];
+
+    @Field(() => [Channel])
+    @OneToMany(
+        () => Channel,
+        (channel) => channel.serverId,
+        { eager: true },
+    )
+    channels?: Channel[];
 }
