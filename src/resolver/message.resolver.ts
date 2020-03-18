@@ -9,7 +9,7 @@ const redis = new ioRedis();
 export class MessageResolver {
     @Query(() => [String])
     async messages(@Arg("nsp") nsp: string, @Arg("channel") channel: string) {
-        const result = await redis.lrange(`/server-${nsp}-${channel}`, 0, 10);
+        const result = await redis.lrange(`/server-${nsp}`, 0, 10);
         // const test = result.map((str) => JSON.parse(str));
 
         return result;
