@@ -28,6 +28,21 @@ export class ChannelResolver {
             return false;
         }
     }
+
+    @Query(() => [Channel])
+    async myChannels(@Arg("serverId") serverId: number) {
+        //* 비동기 처리 추후 문제 가능
+        try {
+            const ChannelDBO = Channel.find({
+                where: { serverId: serverId },
+            });
+            return ChannelDBO;
+        } catch (err) {
+            console.warn(err);
+            return false;
+        }
+    }
+
     @Mutation(() => Boolean)
     async deleteChannel(@Arg("id") id: number) {
         try {

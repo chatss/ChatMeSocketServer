@@ -19,7 +19,8 @@ export class ServerResolver {
             const hash = crypto
                 .createHash("sha256")
                 .update(new Date().toString())
-                .digest("base64");
+                .digest("base64")
+                .replace(/[+=]/g, "");
             const ServerDBI = Server.create({
                 name,
                 namespace: hash,
