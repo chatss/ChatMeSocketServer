@@ -1,7 +1,8 @@
 module.exports = {
     apps: [
         {
-            script: "./dist/server.js",
+            script: "./node_modules/.bin/ts-node",
+            args: "./src/app.ts",
             instances: "max",
             exec_mode: "cluster",
         },
